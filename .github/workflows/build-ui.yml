@@ -20,5 +20,9 @@ jobs:
       uses: actions/setup-go@v5
       with:
         go-version: ${{ matrix.go-version }}
+    - name: Install MinGW
+      uses: egor-tensin/setup-mingw@v2
+      with:
+          platform: x64
     - name: Build
-      run: make build
+      run: make build-ui

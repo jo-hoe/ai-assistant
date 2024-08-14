@@ -45,12 +45,12 @@ func (s *Server) Start() {
 }
 
 func IndexHandler(c echo.Context) error {
-	return c.Render(http.StatusOK, "index.html", count)
+	return c.Render(http.StatusOK, "index", count)
 }
 
 func CountUp(c echo.Context) error {
 	count.Count++
-	return c.Render(http.StatusOK, "index.html", count)
+	return c.Render(http.StatusOK, "count", count)
 }
 
 func (s *Server) Stop() {

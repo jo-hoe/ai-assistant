@@ -12,9 +12,13 @@
 
 <body>
   <p>Hello Worldy</p>
-  <p>You pressed the Button {{ .Count }} times</p>
-  <button hx-post="/count">Don't Click Me</button>
+  <p id="count">{{ template "count" . }}</p>
+  <button hx-target="#count" hx-post="/count">Don't Click Me</button>
 </body>
 
 </html>
+{{ end }}
+
+{{ block "count" . }}
+You pressed the Button {{ .Count }} times.
 {{ end }}

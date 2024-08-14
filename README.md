@@ -1,2 +1,3 @@
-# ai-assistent
-An AI assistent using LLMS to get answers quickly
+# AI Assistant
+
+An AI assistant using LLMS to get answers quickly

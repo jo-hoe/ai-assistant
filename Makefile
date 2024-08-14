@@ -16,6 +16,7 @@ test: ## test service
 
 .PHONY: build-ui
 build-ui: ## builds the ui
+	templ generate
 ifeq ($(DETECT_OS),Windows)
 	go build -o ${UI_NAME} -ldflags "-H windowsgui" ${ROOT_DIR}app/ui/main.go
 else

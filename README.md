@@ -23,6 +23,15 @@ You may need to restart your system before you can build the UI, environment var
 
 ## Run Locally
 
+### Pre-requisites
+
+To build this project you will need
+
+- [Golang](https://go.dev/dl/)
+- [Templ](https://templ.guide/quick-start/installation)
+
+### Run
+
 The project is using `make`. `make` is typically installed by default on Linux and Mac.
 `make` is not strictly required, but it helps and documents commonly used commands.
 

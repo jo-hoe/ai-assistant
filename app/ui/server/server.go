@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/jo-hoe/ai-assistent/app/ui/server/views"
+
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -29,14 +31,13 @@ type Count struct {
 }
 
 func (s *Server) Start() {
-	s.echo.Renderer = NewTemplates()
 
-	count := &Count{Count: 0}
-	s.echo.GET("/", func(c echo.Context) error {
-		count.Count++
-		return c.Render(http.StatusOK, "index", count)
-	})
+	s.echo.GET("/", HomeHandler)
 	s.echo.Logger.Fatal(s.echo.Start(fmt.Sprintf(":%s", s.port)))
+}
+
+func HomeHandler(c echo.Context) error {
+	return Render(c, http.StatusOK, views.Home())
 }
 
 func (s *Server) Stop() {

@@ -7,10 +7,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="css/style.css" rel="stylesheet">
+  <script src="https://unpkg.com/htmx.org/dist/htmx.min.js"></script>
 </head>
 
 <body>
   <p>Hello Worldy</p>
+  <p>You pressed the Button {{ .Count }} times</p>
+  <button hx-post="/count">Don't Click Me</button>
 </body>
 
 </html>

@@ -6,7 +6,7 @@ ROOT_DIR := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 .DEFAULT_GOAL := build-ui
 
 .PHONY: update
-update: ## pulls git repo and installs all dependencies
+update: ## pulls git repo
 	@git -C ${ROOT_DIR} pull
 
 .PHONY: test

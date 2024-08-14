@@ -54,5 +54,8 @@ func CountUp(c echo.Context) error {
 }
 
 func (s *Server) Stop() {
-	s.echo.Shutdown(context.Background())
+	err := s.echo.Shutdown(context.Background())
+	if err != nil {
+		s.echo.Logger.Fatal(err)
+	}
 }

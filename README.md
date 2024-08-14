@@ -58,6 +58,19 @@ make help
 - Golang [Webview](https://github.com/webview/webview_go) to create interoperable client application
 - [Echo](https://echo.labstack.com/) as web framework (server)
 
+## Linting
+
+Project used `golangci-lint` for linting.
+
+<https://golangci-lint.run/welcome/install/>
+
+Run the linting locally by executing
+
+```bash
+golangci-lint run ./...
+```
+
 ## ToDo
 
-Add a [form](https://theprimeagen.github.io/fem-htmx/lessons/htmx-basics/htmx-swap) with the content.
+- Add a [form](https://theprimeagen.github.io/fem-htmx/lessons/htmx-basics/htmx-swap) with the content
+- add containers to test the build on different platforms

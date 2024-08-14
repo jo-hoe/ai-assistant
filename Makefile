@@ -4,7 +4,7 @@ include help.mk
 ROOT_DIR := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 UI_NAME := ai-assistant.exe
 
-.DEFAULT_GOAL := build-ui
+.DEFAULT_GOAL := start
 
 .PHONY: update
 update: ## pulls git repo
@@ -22,3 +22,6 @@ else
 	go build -o ${UI_NAME} ${ROOT_DIR}app/ui/main.go
 endif
 
+.PHONY: start
+start: build-ui # start app
+	${ROOT_DIR}${UI_NAME}

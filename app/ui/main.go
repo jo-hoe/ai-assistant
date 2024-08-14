@@ -1,45 +1,22 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/jo-hoe/ai-assistent/app/ui/server"
 	webview "github.com/webview/webview_go"
 )
 
-const html = `<button id="increment">Tap me</button>
-<div>You tapped <span id="count">0</span> time(s).</div>
-<script>
-  const [incrementElement, countElement] =
-    document.querySelectorAll("#increment, #count");
-  document.addEventListener("DOMContentLoaded", () => {
-    incrementElement.addEventListener("click", () => {
-      window.increment().then(result => {
-        countElement.textContent = result.count;
-      });
-    });
-  });
-</script>`
-
-type IncrementResult struct {
-	Count uint `json:"count"`
-}
-
 func main() {
+	port := "8080"
 	server := server.NewServer("8080")
 	go server.Start()
 	defer server.Stop()
 
-	var count uint = 0
 	w := webview.New(false)
 	defer w.Destroy()
 	w.SetTitle("AI Assistant")
 	w.SetSize(480, 320, webview.HintNone)
-
-	// A binding that increments a value and immediately returns the new value.
-	w.Bind("increment", func() IncrementResult {
-		count++
-		return IncrementResult{Count: count}
-	})
-
-	w.SetHtml(html)
+	w.Navigate(fmt.Sprintf("http://localhost:%s", port))
 	w.Run()
 }

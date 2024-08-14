@@ -1,4 +1,4 @@
-package client
+package aiclient
 
 type Message struct {
 	Role    string `json:"role"`

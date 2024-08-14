@@ -1,4 +1,4 @@
-package client
+package aiclient
 
 type MockClient struct {
 	answers []MockAnswer[string, error]

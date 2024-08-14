@@ -1,6 +1,9 @@
 package main
 
-import webview "github.com/webview/webview_go"
+import (
+	"github.com/jo-hoe/ai-assistent/app/ui/server"
+	webview "github.com/webview/webview_go"
+)
 
 const html = `<button id="increment">Tap me</button>
 <div>You tapped <span id="count">0</span> time(s).</div>
@@ -21,6 +24,10 @@ type IncrementResult struct {
 }
 
 func main() {
+	server := server.NewServer("8080")
+	go server.Start()
+	defer server.Stop()
+
 	var count uint = 0
 	w := webview.New(false)
 	defer w.Destroy()

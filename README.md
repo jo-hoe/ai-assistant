@@ -14,6 +14,8 @@ Once Chocolatey is installed run the following command in Admin mode:
 choco install mingw
 ```
 
+You may need to restart your system before you can build the UI, environment variables may not work after the compiler installation.
+
 ## Run Locally
 
 The project is using `make`. `make` is typically installed by default on Linux and Mac.

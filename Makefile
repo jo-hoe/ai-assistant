@@ -2,6 +2,7 @@ include help.mk
 
 # get root dir
 ROOT_DIR := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
+UI_NAME := ai-assistant.exe
 
 .DEFAULT_GOAL := build-ui
 
@@ -16,7 +17,8 @@ test: ## test service
 .PHONY: build-ui
 build-ui: ## builds the ui
 ifeq ($(DETECT_OS),Windows)
-	go build -ldflags "-H windowsgui" ${ROOT_DIR}app/ui/main.go
+	go build -o ${UI_NAME} -ldflags "-H windowsgui" ${ROOT_DIR}app/ui/main.go
 else
-	go build ${ROOT_DIR}app/ui/main.go
+	go build -o ${UI_NAME} ${ROOT_DIR}app/ui/main.go
 endif
+

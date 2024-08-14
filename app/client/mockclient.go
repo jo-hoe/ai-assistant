@@ -11,7 +11,9 @@ type MockAnswer[answer string, err error] struct {
 }
 
 func (c *MockClient) Chat(model string, messages []Message) (string, error) {
-	return c.answers[c.count].answer, c.answers[c.count].err
+	result, err := c.answers[c.count].answer, c.answers[c.count].err
+	c.count++
+	return result, err
 }
 
 func NewMockClient(answers []MockAnswer[string, error]) *MockClient {

@@ -54,6 +54,5 @@ make help
 
 ## Technologies
 
-- [Templ](https://templ.guide/) for server side rendering
 - Golang [Webview](https://github.com/webview/webview_go) to create interoperable client application
 - [Echo](https://echo.labstack.com/) as web framework (server)

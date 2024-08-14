@@ -9,14 +9,14 @@
             "type": "go",
             "request": "launch",
             "mode": "auto",
-            "program": "${workspaceFolder}/app/ui/main.go"
+            "program": "${workspaceFolder}/main.go"
         },
         {
             "name": "Start Server",
             "type": "go",
             "request": "launch",
             "mode": "auto",
-            "program": "${workspaceFolder}/app/ui/server/debug/main.go"
+            "program": "${workspaceFolder}/app/server/debug/main.go"
         }
     ]
 }

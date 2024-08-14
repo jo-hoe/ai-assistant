@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/jo-hoe/ai-assistent/app/ui/server"
+	"github.com/jo-hoe/ai-assistent/app/server"
 	webview "github.com/webview/webview_go"
 )
 

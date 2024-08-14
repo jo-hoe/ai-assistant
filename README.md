@@ -74,3 +74,4 @@ golangci-lint run ./...
 
 - Add a [form](https://theprimeagen.github.io/fem-htmx/lessons/htmx-basics/htmx-swap) with the content
 - add containers to test the build on different platforms
+- impl a spinner to wait for response

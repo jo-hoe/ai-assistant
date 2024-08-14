@@ -16,7 +16,7 @@ func main() {
 	w := webview.New(false)
 	defer w.Destroy()
 	w.SetTitle("AI Assistant")
-	w.SetSize(480, 320, webview.HintNone)
+	w.SetSize(1024, 600, webview.HintNone)
 	w.Navigate(fmt.Sprintf("http://localhost:%s", port))
 	w.Run()
 }

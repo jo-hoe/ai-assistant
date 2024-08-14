@@ -5,7 +5,8 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/jo-hoe/ai-assistant)](https://goreportcard.com/report/github.com/jo-hoe/ai-assistant)
 [![Coverage Status](https://coveralls.io/repos/github/jo-hoe/ai-assistant/badge.svg?branch=main)](https://coveralls.io/github/jo-hoe/ai-assistant?branch=main)
 
-An AI assistant using LLMS to get answers quickly
+An AI assistant using LLMS to get answers quickly.
+🚧 This is a work in progress.
 
 ## Interoperability
 
@@ -56,3 +57,7 @@ make help
 
 - Golang [Webview](https://github.com/webview/webview_go) to create interoperable client application
 - [Echo](https://echo.labstack.com/) as web framework (server)
+
+## ToDo
+
+Add a [form](https://theprimeagen.github.io/fem-htmx/lessons/htmx-basics/htmx-swap) with the content.

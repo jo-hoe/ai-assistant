@@ -24,33 +24,19 @@ func TestMockClient_Chat(t *testing.T) {
 		},
 	})
 
-	id, responseChannel := client.Chat("", []Message{testMessage})
-	if len(id) == 0 {
-		t.Error("id is empty")
+	response, err := client.Chat("", []Message{testMessage})
+	if response != testAnswer {
+		t.Errorf("expected %s, got %s", testAnswer, response)
 	}
-	response := <-responseChannel
-	if response.ID != id {
-		t.Errorf("expected %s, got %s", id, response.ID)
-	}
-	if response.Response != testAnswer {
-		t.Errorf("expected %s, got %s", testAnswer, response.Response)
-	}
-	if response.Error != nil {
-		t.Errorf("unexpected error %s", response.Error.Error())
+	if err != nil {
+		t.Errorf("unexpected error %s", err.Error())
 	}
 
-	id, responseChannel = client.Chat("", []Message{testMessage})
-	if len(id) == 0 {
-		t.Error("id is empty")
+	response, err = client.Chat("", []Message{testMessage})
+	if response != "" {
+		t.Errorf("expected %s, got %s", "", response)
 	}
-	response = <-responseChannel
-	if response.ID != id {
-		t.Errorf("expected %s, got %s", id, response.ID)
-	}
-	if response.Response != "" {
-		t.Errorf("expected %s, got %s", "", response.Response)
-	}
-	if response.Error == nil {
+	if err == nil {
 		t.Error("expected error, got nil")
 	}
 }

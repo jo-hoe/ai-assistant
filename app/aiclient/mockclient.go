@@ -10,24 +10,10 @@ type MockAnswer[answer string, err error] struct {
 	err    error
 }
 
-func (c *MockClient) Chat(model string, messages []Message) (responseId string, responseChannel chan *Response) {
-	responseChannel = make(chan *Response, 1)
-
-	id := createId()
-	go c.respond(id, responseChannel)
-
-	return id, responseChannel
-}
-
-func (c *MockClient) respond(responseId string, responseChannel chan *Response) {
-	response := NewResponse(
-		responseId,
-		c.answers[c.count].answer,
-		c.answers[c.count].err,
-	)
+func (c *MockClient) Chat(model string, messages []Message) (response string, err error) {
+	response, err = c.answers[c.count].answer, c.answers[c.count].err
 	c.count++
-
-	responseChannel <- response
+	return response, err
 }
 
 func NewMockClient(answers []MockAnswer[string, error]) *MockClient {

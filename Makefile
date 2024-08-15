@@ -38,7 +38,3 @@ docker-test: docker-build ## runs tests in docker
 .PHONY: docker-build-ui-linux
 docker-build-ui-linux: docker-build ## build a linux binary in docker
 	docker run -v "${ROOT_DIR}:/app" --rm ${DOCKER_IMAGE_NAME} make build-ui
-
-.PHONY: docker-lint
-docker-lint: docker-build ## lint code in docker
-	docker run --rm ${DOCKER_IMAGE_NAME} go mod tidy && golangci-lint version

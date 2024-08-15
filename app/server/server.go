@@ -41,7 +41,7 @@ func (s *Server) Start() {
 	s.echo.GET("/", IndexHandler)
 	s.echo.POST("/count", CountUp)
 
-	s.echo.Logger.Fatal(s.echo.Start(fmt.Sprintf(":%s", s.port)))
+	s.echo.Logger.Fatal(s.echo.Start(fmt.Sprintf("127.0.0.1:%s", s.port)))
 }
 
 func IndexHandler(c echo.Context) error {

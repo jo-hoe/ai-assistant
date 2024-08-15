@@ -38,3 +38,4 @@ docker-test: docker-build ## runs tests in docker
 .PHONY: docker-build-ui-linux
 docker-build-ui-linux: docker-build ## build a linux binary in docker
 	docker run -v "${ROOT_DIR}:/app" --rm ${DOCKER_IMAGE_NAME} make build-ui
+

@@ -15,7 +15,6 @@ type ConfigDescription struct {
 
 type AIClientConfigDescription struct {
 	Type       string            `yaml:"type"`
-	Name       string            `yaml:"name"`
 	Properties map[string]string `yaml:",inline"`
 }
 
@@ -41,7 +40,6 @@ func NewConfig(path string) (config *Config, err error) {
 
 		switch clientsConfig.Type {
 		case aiclient.MOCK_CLIENT_TYPE_NAME:
-			//Name:       svcConfig.Name,
 			//Connection: svcConfig.Properties["connection"],
 			client = &aiclient.MockClient{}
 		default:

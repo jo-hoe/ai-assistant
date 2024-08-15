@@ -19,6 +19,10 @@ func NewMockClient(answers []MockAnswer[string, error]) *MockClient {
 	}
 }
 
+func NewClient(properties map[string]string) (client *AIClient, err error) {
+	return nil, nil
+}
+
 func (c *MockClient) Chat(model string, messages []Message) (response string, err error) {
 	response, err = c.answers[c.count].answer, c.answers[c.count].err
 	c.count++

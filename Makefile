@@ -33,7 +33,7 @@ docker-build:
 
 .PHONY: docker-test
 docker-test: docker-build ## runs tests in docker
-	docker run --rm ${DOCKER_IMAGE_NAME} make test
+	docker run -v "${ROOT_DIR}:/app" --rm ${DOCKER_IMAGE_NAME} go test -v ./... -covermode=count -coverprofile=coverage.out
 
 .PHONY: docker-build-ui-linux
 docker-build-ui-linux: docker-build ## build a linux binary in docker

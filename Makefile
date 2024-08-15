@@ -12,7 +12,7 @@ update: ## pulls git repo
 	@git -C ${ROOT_DIR} pull
 
 .PHONY: test
-test: ## test service
+test: ## run go test
 	@go test ${ROOT_DIR}...
 
 .PHONY: build-ui

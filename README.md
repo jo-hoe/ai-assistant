@@ -23,14 +23,24 @@ You may need to restart your system before you can build the UI, environment var
 
 ## Run Locally
 
+### Build
+
+#### Linux
+
+You can build the linux version via docker.
+Just run `make docker-build-ui-linux` or without docker by `make build-ui`
+
+#### Windows
+
+You can build the windows version via `make build-ui`.
+
 ### Pre-requisites
 
 To build this project you will need
 
 - [Golang](https://go.dev/dl/)
-- [Templ](https://templ.guide/quick-start/installation)
 
-### Run
+### Development
 
 The project is using `make`. `make` is typically installed by default on Linux and Mac.
 `make` is not strictly required, but it helps and documents commonly used commands.

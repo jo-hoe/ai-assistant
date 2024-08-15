@@ -17,6 +17,6 @@ jobs:
     steps:
       - name: "Checkout Repository"
         uses: actions/checkout@v4
-      - name: Build the Docker image
-        run: docker build -f ./test/Dockerfile .
+      - name: Run Test
+        run: make docker-test
     

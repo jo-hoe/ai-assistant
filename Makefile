@@ -2,7 +2,8 @@ include help.mk
 
 # get root dir
 ROOT_DIR := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
-UI_NAME := ai-assistant.exe
+DOCKER_IMAGE_NAME := ai-assistant
+UI_NAME := ${DOCKER_IMAGE_NAME}.exe
 
 .DEFAULT_GOAL := start
 
@@ -23,5 +24,17 @@ else
 endif
 
 .PHONY: start
-start: build-ui # start app
+start: build-ui ## start app
 	${ROOT_DIR}${UI_NAME}
+
+.PHONY: docker-build
+docker-build:
+	docker build -f ${ROOT_DIR}Dockerfile -t ${DOCKER_IMAGE_NAME} .
+
+.PHONY: docker-test
+docker-test: docker-build ## runs tests in docker
+	docker run --rm ${DOCKER_IMAGE_NAME} make test
+
+.PHONY: docker-build-ui-linux
+docker-build-ui-linux: docker-build ## build a linux binary in docker
+	docker run --rm ${DOCKER_IMAGE_NAME} make build-ui

@@ -18,5 +18,5 @@ jobs:
       - name: "Checkout Repository"
         uses: actions/checkout@v4
       - name: Build the Docker image
-        run: docker build . --file test\Dockerfile .
+        run: docker build -f ./test/Dockerfile .
     

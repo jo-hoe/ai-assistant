@@ -1,5 +1,0 @@
-aiclients:
-  - type: mockclient
-    error: ""
-    delayInMS: 500
-    commaSeparatedAnswers: "42, this is an answer"

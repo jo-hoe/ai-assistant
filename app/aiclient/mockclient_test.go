@@ -2,24 +2,34 @@ package aiclient
 
 import (
 	"errors"
+	"strings"
 	"testing"
 )
 
 func TestMockClient_Chat(t *testing.T) {
-	expectedAnswers := []string{"answer1", "answer2"}
+	expectedAnswers := []string{"first answer", "second answer"}
 	mockClient := NewMockClient(expectedAnswers, 0, nil)
 
 	responseChannel, err := mockClient.Chat(nil)
-
 	if err != nil {
 		t.Errorf(err.Error())
 	}
+	checkAnswer(responseChannel, expectedAnswers, 0, t)
 
-	for _, expectedAnswer := range expectedAnswers {
-		answer := <-responseChannel
-		if answer != expectedAnswer {
-			t.Errorf("Expected %s, got %s", expectedAnswer, answer)
-		}
+	responseChannel, err = mockClient.Chat(nil)
+	if err != nil {
+		t.Errorf(err.Error())
+	}
+	checkAnswer(responseChannel, expectedAnswers, 1, t)
+}
+
+func checkAnswer(responseChannel chan string, expectedAnswers []string, index int, t *testing.T) {
+	stringBuilder := strings.Builder{}
+	for answerPart := range responseChannel {
+		stringBuilder.WriteString(answerPart)
+	}
+	if expectedAnswers[index] != stringBuilder.String() {
+		t.Errorf("expected %s, got %s", expectedAnswers[0], stringBuilder.String())
 	}
 }
 

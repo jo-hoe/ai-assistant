@@ -40,8 +40,10 @@ func NewConfig(path string) (config *Config, err error) {
 
 		switch clientsConfig.Type {
 		case aiclient.MOCK_CLIENT_TYPE_NAME:
-			//Connection: svcConfig.Properties["connection"],
-			client = &aiclient.MockClient{}
+			client, err = aiclient.NewMockClientFromMap(clientsConfig.Properties)
+			if err != nil {
+				return nil, err
+			}
 		default:
 			return nil, fmt.Errorf("unknown service type: %s", clientsConfig.Type)
 		}

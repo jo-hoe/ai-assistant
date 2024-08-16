@@ -74,6 +74,18 @@ func TestNewMockClientFromMap(t *testing.T) {
 				count:               0,
 			},
 			wantErr: false,
+		}, {
+			name: "test defaults",
+			args: args{
+				properties: map[string]string{},
+			},
+			wantClient: &MockClient{
+				answers:             []string{},
+				delayInMilliseconds: 0,
+				errString:           "",
+				count:               0,
+			},
+			wantErr: false,
 		},
 	}
 	for _, tt := range tests {

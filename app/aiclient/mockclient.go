@@ -31,10 +31,6 @@ func NewMockClient(answers []string, delayInMilliseconds int, errString string) 
 }
 
 func NewMockClientFromMap(properties map[string]string) (client *MockClient, err error) {
-	if properties == nil {
-		return nil, errors.New("properties is nil")
-	}
-
 	var answers []string
 	var delayInMilliseconds int
 	var errString string

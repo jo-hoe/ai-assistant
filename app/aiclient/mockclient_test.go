@@ -1,14 +1,14 @@
 package aiclient
 
 import (
-	"errors"
+	"reflect"
 	"strings"
 	"testing"
 )
 
 func TestMockClient_Chat(t *testing.T) {
 	expectedAnswers := []string{"first answer", "second answer"}
-	mockClient := NewMockClient(expectedAnswers, 0, nil)
+	mockClient := NewMockClient(expectedAnswers, 0, "")
 
 	responseChannel, err := mockClient.Chat(nil)
 	if err != nil {
@@ -34,7 +34,7 @@ func checkAnswer(responseChannel chan string, expectedAnswers []string, index in
 }
 
 func TestMockClient_Chat_Error(t *testing.T) {
-	expectedError := errors.New("error")
+	expectedError := "error"
 	mockClient := NewMockClient([]string{}, 0, expectedError)
 
 	responseChannel, err := mockClient.Chat(nil)
@@ -45,5 +45,47 @@ func TestMockClient_Chat_Error(t *testing.T) {
 
 	if responseChannel != nil {
 		t.Errorf("response channel was not nil")
+	}
+}
+
+func TestNewMockClientFromMap(t *testing.T) {
+	type args struct {
+		properties map[string]string
+	}
+	tests := []struct {
+		name       string
+		args       args
+		wantClient *MockClient
+		wantErr    bool
+	}{
+		{
+			name: "full properties",
+			args: args{
+				properties: map[string]string{
+					"delayInMilliseconds":   "100",
+					"err":                   "error",
+					"commaSeparatedAnswers": "42,another answer",
+				},
+			},
+			wantClient: &MockClient{
+				answers:             []string{"42", "another answer"},
+				delayInMilliseconds: 100,
+				errString:           "error",
+				count:               0,
+			},
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			gotClient, err := NewMockClientFromMap(tt.args.properties)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("NewMockClientFromMap() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(gotClient, tt.wantClient) {
+				t.Errorf("NewMockClientFromMap() = %v, want %v", gotClient, tt.wantClient)
+			}
+		})
 	}
 }

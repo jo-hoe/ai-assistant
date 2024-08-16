@@ -12,14 +12,16 @@
 </head>
 
 <body>
-  <p>Hello Worldy</p>
-  <p id="count">{{ template "count" . }}</p>
-  <button hx-target="#count" hx-post="/count">Don't Click Me</button>
+  <textarea placeholder="Your question goes here" id="question"></textarea>
+  <button>Ask</button>
+  <textarea readonly="true" id="answer">
+    {{ template "answer" . }}
+  </textarea>
 </body>
 
 </html>
 {{ end }}
 
-{{ block "count" . }}
-You pressed the Button {{ .Count }} times.
+{{ block "answer" . }}
+Some Demo Text
 {{ end }}

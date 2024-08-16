@@ -6,5 +6,5 @@ type Message struct {
 }
 
 type AIClient interface {
-	Chat(model string, messages []Message) (response string, err error)
+	Chat(messages []Message) (response chan string, err error)
 }

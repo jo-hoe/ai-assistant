@@ -1,21 +1,20 @@
 package aiclient
 
+import "time"
+
 const MOCK_CLIENT_TYPE_NAME = "mockclient"
 
 type MockClient struct {
-	answers []MockAnswer[string, error]
-	count   int
+	answers             []string
+	delayInMilliseconds int
+	err                 error
 }
 
-type MockAnswer[answer string, err error] struct {
-	answer string
-	err    error
-}
-
-func NewMockClient(answers []MockAnswer[string, error]) *MockClient {
+func NewMockClient(answers []string, delayInMilliseconds int, err error) *MockClient {
 	return &MockClient{
-		answers: answers,
-		count:   0,
+		answers:             answers,
+		delayInMilliseconds: delayInMilliseconds,
+		err:                 err,
 	}
 }
 
@@ -23,8 +22,19 @@ func NewClient(properties map[string]string) (client *AIClient, err error) {
 	return nil, nil
 }
 
-func (c *MockClient) Chat(model string, messages []Message) (response string, err error) {
-	response, err = c.answers[c.count].answer, c.answers[c.count].err
-	c.count++
+func (c *MockClient) Chat(messages []Message) (response chan string, err error) {
+	if c.err != nil {
+		return nil, c.err
+	}
+	response = make(chan string)
+	go c.respond(response)
 	return response, err
+}
+
+func (c *MockClient) respond(response chan string) {
+	for _, answer := range c.answers {
+		response <- answer
+		time.Sleep(time.Duration(c.delayInMilliseconds))
+	}
+	close(response)
 }

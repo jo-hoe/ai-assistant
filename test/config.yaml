@@ -1,0 +1,8 @@
+aiclients:
+  - type: mockclient
+    error: ""
+    delayInMS: 500
+    returns:
+      - answer: 42
+      - answer: "this is an answer"
+      - answer:

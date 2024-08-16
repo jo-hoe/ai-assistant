@@ -6,37 +6,34 @@ import (
 )
 
 func TestMockClient_Chat(t *testing.T) {
-	testAnswer := "test"
-	testError := errors.New("error")
-	testMessage := Message{
-		Role:    "user",
-		Content: "test",
-	}
+	expectedAnswers := []string{"answer1", "answer2"}
+	mockClient := NewMockClient(expectedAnswers, 0, nil)
 
-	client := NewMockClient([]MockAnswer[string, error]{
-		{
-			answer: testAnswer,
-			err:    nil,
-		},
-		{
-			answer: "",
-			err:    testError,
-		},
-	})
+	responseChannel, err := mockClient.Chat(nil)
 
-	response, err := client.Chat("", []Message{testMessage})
-	if response != testAnswer {
-		t.Errorf("expected %s, got %s", testAnswer, response)
-	}
 	if err != nil {
-		t.Errorf("unexpected error %s", err.Error())
+		t.Errorf(err.Error())
 	}
 
-	response, err = client.Chat("", []Message{testMessage})
-	if response != "" {
-		t.Errorf("expected %s, got %s", "", response)
+	for _, expectedAnswer := range expectedAnswers {
+		answer := <-responseChannel
+		if answer != expectedAnswer {
+			t.Errorf("Expected %s, got %s", expectedAnswer, answer)
+		}
 	}
+}
+
+func TestMockClient_Chat_Error(t *testing.T) {
+	expectedError := errors.New("error")
+	mockClient := NewMockClient([]string{}, 0, expectedError)
+
+	responseChannel, err := mockClient.Chat(nil)
+
 	if err == nil {
-		t.Error("expected error, got nil")
+		t.Errorf("error was nil")
+	}
+
+	if responseChannel != nil {
+		t.Errorf("response channel was not nil")
 	}
 }

@@ -23,32 +23,23 @@ func NewServer() *Server {
 	}
 }
 
-type Counter struct {
-	Count int
-}
-
-var count Counter
-
 func (s *Server) Start(port int) {
 	s.echo.Renderer = &Template{
 		templates: template.Must(template.ParseFS(templateFS, viewsPattern)),
 	}
 
-	count = Counter{Count: 0}
-
 	s.echo.GET("/", IndexHandler)
-	s.echo.POST("/count", CountUp)
+	s.echo.POST("/ask", AskAIHandler)
 
 	s.echo.Logger.Fatal(s.echo.Start(fmt.Sprintf("127.0.0.1:%d", port)))
 }
 
 func IndexHandler(c echo.Context) error {
-	return c.Render(http.StatusOK, "index", count)
+	return c.Render(http.StatusOK, "index", nil)
 }
 
-func CountUp(c echo.Context) error {
-	count.Count++
-	return c.Render(http.StatusOK, "count", count)
+func AskAIHandler(c echo.Context) error {
+	return c.Render(http.StatusOK, "update", nil)
 }
 
 func (s *Server) Stop() {

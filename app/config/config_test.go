@@ -10,7 +10,7 @@ import (
 	"github.com/jo-hoe/ai-assistent/app/aiclient"
 )
 
-const envFileDir = "test"
+const envFileDir = "testdata"
 const envFileName = "testconfig.yaml"
 
 func TestNewConfig(t *testing.T) {

@@ -12,8 +12,10 @@
 </head>
 
 <body>
-  <textarea placeholder="Your question goes here" id="question"></textarea>
-  <button>Ask</button>
+  <form hx-post="/ask" placeholder="Your question goes here" id="question" hx-trigger="click from:button[type=submit]">
+    <textarea name="text"></textarea>
+    <button type="submit">Ask</button>
+  </form>
   <textarea readonly="true" id="answer">
     {{ template "answer" . }}
   </textarea>

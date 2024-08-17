@@ -41,7 +41,7 @@ To build this project you will need
 
 - [Golang](https://go.dev/dl/)
 
-### Development
+### How to Use
 
 The project is using `make`. `make` is typically installed by default on Linux and Mac.
 `make` is not strictly required, but it helps and documents commonly used commands.
@@ -55,8 +55,6 @@ winget install GnuWin32.Make
 You will also need Docker and Python.
 Run `make init` to install all dependencies in a virtual Python environment.
 
-### How to Use
-
 You can check all `make` commands by running.
 
 ```bash
@@ -67,6 +65,10 @@ make help
 
 - Golang [Webview](https://github.com/webview/webview_go) to create interoperable client application
 - [Echo](https://echo.labstack.com/) as web framework (server)
+
+## Development
+
+You can use [Air](https://github.com/air-verse/air) continuously update the project while development.
 
 ## Linting
 

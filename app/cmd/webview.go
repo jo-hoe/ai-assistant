@@ -7,10 +7,10 @@ import (
 )
 
 func StartWebview(port int) {
-	w := webview.New(false)
-	defer w.Destroy()
-	w.SetTitle("AI Assistant")
-	w.SetSize(1024, 600, webview.HintNone)
-	w.Navigate(fmt.Sprintf("http://localhost:%d", port))
-	w.Run()
+	view := webview.New(false)
+	defer view.Destroy()
+	view.SetTitle("AI Assistant")
+	view.SetSize(1024, 600, webview.HintNone)
+	view.Navigate(fmt.Sprintf("http://localhost:%d", port))
+	view.Run()
 }

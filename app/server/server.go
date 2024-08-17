@@ -39,7 +39,7 @@ func IndexHandler(c echo.Context) error {
 }
 
 func AskAIHandler(c echo.Context) error {
-	return c.Render(http.StatusOK, "update", nil)
+	return c.Render(http.StatusOK, "answer", nil)
 }
 
 func (s *Server) Stop() {

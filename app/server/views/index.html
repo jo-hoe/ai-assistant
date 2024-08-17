@@ -12,13 +12,17 @@
 </head>
 
 <body>
-  <form hx-post="/ask" placeholder="Your question goes here" id="question" hx-trigger="click from:button[type=submit]">
-    <textarea name="text"></textarea>
-    <button type="submit">Ask</button>
+  <form>
+    <textarea name="question" id="question" placeholder="Your question goes here"></textarea>
+    <button hx-post="/ask?action=save&text={question}"
+            hx-include="#question"
+            hx-target="#response" hx-swap="innerHTML">
+      Ask
+    </button>
   </form>
-  <textarea readonly="true" id="answer">
+  <textarea readonly="true" id="response">
     {{ template "answer" . }}
-  </textarea>
+  </textarea>  
 </body>
 
 </html>

@@ -18,9 +18,9 @@ test: ## run go test
 .PHONY: build-ui
 build-ui: ## builds the ui
 ifeq ($(DETECT_OS),Windows)
-	go build -o ${UI_NAME} -ldflags "-H windowsgui" ${ROOT_DIR}main.go
+	go build -o ${UI_NAME} -ldflags '-H windowsgui -s' ${ROOT_DIR}main.go
 else
-	go build -o ${UI_NAME} ${ROOT_DIR}main.go
+	go build -o ${UI_NAME} -ldflags '-s' ${ROOT_DIR}main.go
 endif
 
 .PHONY: start

@@ -9,7 +9,7 @@ on:
       
 name: build
 jobs:
-  test:
+  build:
     strategy:
       matrix:
         platform: [ubuntu-latest]

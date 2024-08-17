@@ -21,6 +21,12 @@ func TestMockClient_Chat(t *testing.T) {
 		t.Errorf(err.Error())
 	}
 	checkAnswer(responseChannel, expectedAnswers, 1, t)
+
+	responseChannel, err = mockClient.Chat(nil)
+	if err != nil {
+		t.Errorf(err.Error())
+	}
+	checkAnswer(responseChannel, expectedAnswers, 0, t)
 }
 
 func checkAnswer(responseChannel chan string, expectedAnswers []string, index int, t *testing.T) {

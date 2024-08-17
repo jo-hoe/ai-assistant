@@ -1,0 +1,28 @@
+  
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+      
+name: build
+jobs:
+  test:
+    strategy:
+      matrix:
+        platform: [ubuntu-latest]
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - name: "Checkout Repository"
+        uses: actions/checkout@v4
+      - name: Build Executable
+        run: make docker-build-ui-linux
+      - name: Convert coverage.out to coverage.lcov
+        uses: jandelgado/gcov2lcov-action@v1
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.github_token }}
+          path-to-lcov: coverage.lcov

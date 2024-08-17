@@ -2,7 +2,6 @@ package config
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"sync"
 
@@ -31,24 +30,20 @@ type Config struct {
 	AIClients aiclient.AIClients
 }
 
-var lock = &sync.Mutex{}
-
-// singleton of config
-var configInstance *Config
+var (
+	once sync.Once
+	// singleton of config
+	configInstance *Config
+)
 
 func GetConfig() *Config {
-	if configInstance == nil {
-		lock.Lock()
-		defer lock.Unlock()
-		if configInstance == nil {
-			configInstance, err := loadConfig()
-			if err != nil {
-				log.Fatalf("could not load config %+v", err)
-			}
-			log.Print("successfully loaded config")
-			return configInstance
+	once.Do(func() {
+		var err error
+		configInstance, err = loadConfig()
+		if err != nil {
+			panic(err)
 		}
-	}
+	})
 
 	return configInstance
 }

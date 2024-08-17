@@ -31,8 +31,8 @@ func NewClaudeAIClientFromMap(properties map[string]string) (client *ClaudeClien
 	var apiKey string
 	var model string
 
-	if properties[claude_api_env_key] == "" {
-		apiKey = common.GetEnvOrDefault(claude_default_api_env_key, "")
+	if properties[claude_api_env_key] != "" {
+		apiKey = common.GetEnvOrDefault(properties[claude_api_env_key], "")
 	}
 	if properties[claude_api_key_key] != "" {
 		apiKey = properties[claude_api_key_key]

@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"os"
+	"reflect"
 	"testing"
 )
 
@@ -48,7 +50,7 @@ func TestClaudeAIClient_Chat(t *testing.T) {
 	// Create a client that uses the mock server
 	client := &ClaudeClient{
 		ApiKey:     "test-api-key",
-        ApiUrl:     server.URL,
+		ApiUrl:     server.URL,
 		HttpClient: server.Client(),
 	}
 
@@ -69,5 +71,78 @@ func TestClaudeAIClient_Chat(t *testing.T) {
 	expectedResponse := "Hello, I'm Claude!"
 	if response != expectedResponse {
 		t.Errorf("Expected response %q, got %q", expectedResponse, response)
+	}
+}
+
+func TestNewClaudeAIClientFromMap(t *testing.T) {
+	envApiKey := "test-api-key"
+	envApiKeyValue := "test-api-env-key"
+	os.Setenv(envApiKey, envApiKeyValue)
+	defer os.Unsetenv(claude_default_api_env_key)
+
+	type args struct {
+		properties map[string]string
+	}
+	tests := []struct {
+		name       string
+		args       args
+		wantClient *ClaudeClient
+		wantErr    bool
+	}{
+		{
+			name: "full properties",
+			args: args{
+				properties: map[string]string{
+					claude_api_key_key: "test-api-key",
+					claude_model_key:   "test-model",
+					claude_api_env_key: "test-api-env-key",
+				},
+			},
+			wantClient: &ClaudeClient{
+				ApiKey:     "test-api-key",
+				ApiUrl:     CLAUDE_AI_URL,
+				Model:      "test-model",
+				HttpClient: &http.Client{},
+			},
+			wantErr: false,
+		}, {
+			name: "load key from env",
+			args: args{
+				properties: map[string]string{
+					claude_api_env_key: envApiKey,
+				},
+			},
+			wantClient: &ClaudeClient{
+				ApiKey:     envApiKeyValue,
+				ApiUrl:     CLAUDE_AI_URL,
+				Model:      CLAUDE_DEFAULT_MODEL,
+				HttpClient: &http.Client{},
+			},
+			wantErr: false,
+		}, {
+			name: "default",
+			args: args{
+				properties: map[string]string{},
+			},
+			wantClient: &ClaudeClient{
+				ApiKey:     "",
+				ApiUrl:     CLAUDE_AI_URL,
+				Model:      CLAUDE_DEFAULT_MODEL,
+				HttpClient: &http.Client{},
+			},
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			gotClient, err := NewClaudeAIClientFromMap(tt.args.properties)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("NewClaudeAIClientFromMap() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(gotClient, tt.wantClient) {
+				t.Errorf("NewClaudeAIClientFromMap() = %v, want %v", gotClient, tt.wantClient)
+			}
+		})
 	}
 }

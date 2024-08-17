@@ -13,16 +13,13 @@
 
 <body>
   <form>
-    <textarea name="question" id="question" placeholder="Your question goes here"></textarea>
-    <button hx-post="/ask?action=save&text={question}"
-            hx-include="#question"
-            hx-target="#response" hx-swap="innerHTML">
+    <textarea name="content" id="content"></textarea>
+    <button hx-post="/ask?action=ask" hx-include="#content" hx-target="#result">
       Ask
     </button>
   </form>
-  <textarea readonly="true" id="response">
-    {{ template "answer" . }}
-  </textarea>  
+
+  <div id="result">{{ template "answer" . }}</div>
 </body>
 
 </html>

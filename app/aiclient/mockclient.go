@@ -64,7 +64,7 @@ func (c *MockClient) Chat(messages []Message) (response chan string, err error) 
 
 func (c *MockClient) respond(response chan string) {
 	for i, answerPart := range strings.Split(c.answers[c.count%len(c.answers)], " ") {
-		time.Sleep(time.Duration(c.delayInMilliseconds*1000) * time.Millisecond)
+		time.Sleep(time.Duration(c.delayInMilliseconds) * time.Millisecond)
 
 		if i == 0 {
 			response <- answerPart

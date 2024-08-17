@@ -18,11 +18,7 @@ func TestNewConfig(t *testing.T) {
 	os.Setenv(DEFAULT_CONFIG_PATH_KEY, configPath)
 	defer os.Unsetenv(DEFAULT_CONFIG_PATH_KEY)
 
-	config, err := LoadConfig()
-
-	if err != nil {
-		t.Error(err)
-	}
+	config := GetConfig()
 
 	if config == nil {
 		t.Error("config is nil")

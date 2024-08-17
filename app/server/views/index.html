@@ -13,8 +13,8 @@
 
 <body>
   <form>
-    <textarea name="content" id="content"></textarea>
-    <button hx-post="/ask?action=ask" hx-include="#content" hx-target="#result">
+    <textarea name="question" id="question"></textarea>
+    <button hx-post="/ask?question-prefix=hallo" hx-include="#question" hx-target="#result">
       Ask
     </button>
   </form>
@@ -26,4 +26,5 @@
 {{ end }}
 
 {{ block "answer" . }}
+Your answer: {{ .Answer }}
 {{ end }}

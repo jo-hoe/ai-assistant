@@ -2,7 +2,9 @@ package config
 
 import (
 	"fmt"
+	"log"
 	"os"
+	"sync"
 
 	"github.com/jo-hoe/ai-assistent/app/aiclient"
 
@@ -26,10 +28,32 @@ type AIClientConfigDescription struct {
 
 type Config struct {
 	Port      int
-	AIClients []aiclient.AIClient
+	AIClients aiclient.AIClients
 }
 
-func LoadConfig() (config *Config, err error) {
+var lock = &sync.Mutex{}
+
+// singleton of config
+var configInstance *Config
+
+func GetConfig() *Config {
+	if configInstance == nil {
+		lock.Lock()
+		defer lock.Unlock()
+		if configInstance == nil {
+			configInstance, err := loadConfig()
+			if err != nil {
+				log.Fatalf("could not load config %+v", err)
+			}
+			log.Print("successfully loaded config")
+			return configInstance
+		}
+	}
+
+	return configInstance
+}
+
+func loadConfig() (config *Config, err error) {
 	configPath := GetEnvOrDefault(DEFAULT_CONFIG_PATH_KEY, DEFAULT_CONFIG_PATH)
 	return newConfig(configPath)
 }

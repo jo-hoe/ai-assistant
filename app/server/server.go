@@ -4,22 +4,27 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"strings"
 	"text/template"
 
+	"github.com/jo-hoe/ai-assistent/app/aiclient"
+	"github.com/jo-hoe/ai-assistent/app/config"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
 
 type Server struct {
-	echo *echo.Echo
+	echo   *echo.Echo
+	config *config.Config
 }
 
-func NewServer() *Server {
+func NewServer(config *config.Config) *Server {
 	e := echo.New()
 	e.Use(middleware.Logger())
 
 	return &Server{
-		echo: e,
+		echo:   e,
+		config: config,
 	}
 }
 
@@ -45,6 +50,42 @@ func IndexHandler(c echo.Context) error {
 	return c.Render(http.StatusOK, "index", nil)
 }
 
+type question struct {
+	Question string `form:"question"`
+}
+
+type Answer struct {
+	Answer string
+}
+
 func AskAIHandler(c echo.Context) error {
-	return c.Render(http.StatusOK, "answer", "hello")
+	prefix := c.QueryParam("question-prefix")
+
+	var question question
+	if err := c.Bind(&question); err != nil {
+		return c.String(http.StatusBadRequest, "Invalid input")
+	}
+
+	config := config.GetConfig()
+
+	responseChannel, err := config.AIClients.GetAnswer([]aiclient.Message{
+		{
+			Role:    "user",
+			Content: prefix + question.Question,
+		},
+	})
+
+	if err != nil {
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
+
+	stringBuilder := strings.Builder{}
+	for answerPart := range responseChannel {
+		stringBuilder.WriteString(answerPart)
+	}
+	answer := stringBuilder.String()
+
+	return c.Render(http.StatusOK, "answer", Answer{
+		Answer: answer,
+	})
 }

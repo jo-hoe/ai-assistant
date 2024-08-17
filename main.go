@@ -12,12 +12,8 @@ func main() {
 	headless := flag.Bool("headless", false, "If true the webview will not be started.")
 	flag.Parse()
 
-	config, err := config.LoadConfig()
-	if err != nil {
-		panic(err)
-	}
-
-	server := server.NewServer()
+	config := config.GetConfig()
+	server := server.NewServer(config)
 	defer server.Stop()
 
 	if *headless {

@@ -68,9 +68,9 @@ func TestNewMockClientFromMap(t *testing.T) {
 			name: "full properties",
 			args: args{
 				properties: map[string]string{
-					MOCK_CLIENT_DELAY_IN_MILLISECONDS:   "100",
-					MOCK_CLIENT_ERR_STRING:              "error",
-					MOCK_CLIENT_COMMA_SEPARATED_ANSWERS: "42,another answer",
+					mock_client_delay_in_ms:             "100",
+					mock_client_err_string:              "error",
+					mock_client_comma_separated_answers: "42,another answer",
 				},
 			},
 			wantClient: &MockClient{

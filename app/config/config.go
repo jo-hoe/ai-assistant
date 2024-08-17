@@ -75,6 +75,11 @@ func newConfig(path string) (config *Config, err error) {
 			if err != nil {
 				return nil, err
 			}
+		case aiclient.CLAUDE_TYPE_NAME:
+			client, err = aiclient.NewClaudeAIClientFromMap(clientsConfig.Properties)
+			if err != nil {
+				return nil, err
+			}
 		default:
 			return nil, fmt.Errorf("unknown service type: %s", clientsConfig.Type)
 		}

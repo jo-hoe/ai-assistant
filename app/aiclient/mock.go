@@ -8,10 +8,11 @@ import (
 )
 
 const (
-	MOCK_CLIENT_TYPE_NAME               = "mockclient"
-	MOCK_CLIENT_ERR_STRING              = "errString"
-	MOCK_CLIENT_DELAY_IN_MILLISECONDS   = "delayInMilliseconds"
-	MOCK_CLIENT_COMMA_SEPARATED_ANSWERS = "commaSeparatedAnswers"
+	MOCK_CLIENT_TYPE_NAME = "mockclient"
+
+	mock_client_err_string              = "errString"
+	mock_client_delay_in_ms             = "delayInMilliseconds"
+	mock_client_comma_separated_answers = "commaSeparatedAnswers"
 )
 
 type MockClient struct {
@@ -35,19 +36,19 @@ func NewMockClientFromMap(properties map[string]string) (client *MockClient, err
 	var delayInMilliseconds int
 	var errString string
 
-	if properties[MOCK_CLIENT_DELAY_IN_MILLISECONDS] == "" {
+	if properties[mock_client_delay_in_ms] == "" {
 		delayInMilliseconds = 0
 	} else {
-		delayInMilliseconds, err = strconv.Atoi(properties[MOCK_CLIENT_DELAY_IN_MILLISECONDS])
+		delayInMilliseconds, err = strconv.Atoi(properties[mock_client_delay_in_ms])
 		if err != nil {
 			return nil, err
 		}
 	}
-	errString = properties[MOCK_CLIENT_ERR_STRING]
-	if properties[MOCK_CLIENT_COMMA_SEPARATED_ANSWERS] == "" {
+	errString = properties[mock_client_err_string]
+	if properties[mock_client_comma_separated_answers] == "" {
 		answers = []string{}
 	} else {
-		answers = strings.Split(properties[MOCK_CLIENT_COMMA_SEPARATED_ANSWERS], ",")
+		answers = strings.Split(properties[mock_client_comma_separated_answers], ",")
 	}
 
 	return NewMockClient(answers, delayInMilliseconds, errString), nil

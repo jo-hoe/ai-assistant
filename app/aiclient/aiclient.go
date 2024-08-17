@@ -1,10 +1,22 @@
 package aiclient
 
-import "errors"
+import (
+	"errors"
+	"strings"
+)
 
 type Message struct {
 	Role    string `json:"role"`
 	Content string `json:"content"`
+}
+
+type Answer struct {
+	Answer []AnswerChunk
+}
+
+type AnswerChunk struct {
+	Answer string
+	Error  error
 }
 
 type AIClients []AIClient
@@ -21,4 +33,12 @@ func (c *AIClients) GetAnswer(messages []Message) (response chan string, err err
 		}
 	}
 	return nil, errors.New("all clients failed")
+}
+
+func (c *Answer) CompleteAnswer() string {
+	stringBuilder := strings.Builder{}
+	for _, chunk := range c.Answer {
+		stringBuilder.WriteString(chunk.Answer)
+	}
+	return stringBuilder.String()
 }

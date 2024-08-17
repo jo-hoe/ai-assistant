@@ -12,16 +12,14 @@ import (
 
 type Server struct {
 	echo *echo.Echo
-	port string
 }
 
-func NewServer(port string) *Server {
+func NewServer() *Server {
 	e := echo.New()
 	e.Use(middleware.Logger())
 
 	return &Server{
 		echo: e,
-		port: port,
 	}
 }
 
@@ -31,7 +29,7 @@ type Counter struct {
 
 var count Counter
 
-func (s *Server) Start() {
+func (s *Server) Start(port int) {
 	s.echo.Renderer = &Template{
 		templates: template.Must(template.ParseFS(templateFS, viewsPattern)),
 	}
@@ -41,7 +39,7 @@ func (s *Server) Start() {
 	s.echo.GET("/", IndexHandler)
 	s.echo.POST("/count", CountUp)
 
-	s.echo.Logger.Fatal(s.echo.Start(fmt.Sprintf("127.0.0.1:%s", s.port)))
+	s.echo.Logger.Fatal(s.echo.Start(fmt.Sprintf("127.0.0.1:%d", port)))
 }
 
 func IndexHandler(c echo.Context) error {

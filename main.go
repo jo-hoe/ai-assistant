@@ -1,22 +1,34 @@
 package main
 
 import (
-	"fmt"
+	"flag"
+	"log"
 
+	"github.com/jo-hoe/ai-assistent/app/cmd"
 	"github.com/jo-hoe/ai-assistent/app/server"
-	webview "github.com/webview/webview_go"
 )
 
 func main() {
-	port := "8080"
-	server := server.NewServer("8080")
-	go server.Start()
+	port := flag.Int("port", -1, "Select to port number where the server will be running.")
+	headless := flag.Bool("headless", false, "If true the webview will not be started.")
+	flag.Parse()
+
+	if *port == -1 {
+		freePort, err := server.GetFreeTcpPort()
+		if err != nil {
+			log.Fatal(err)
+		}
+		*port = freePort
+	}
+	log.Printf("starting server on port :%d", *port)
+
+	server := server.NewServer()
 	defer server.Stop()
 
-	w := webview.New(false)
-	defer w.Destroy()
-	w.SetTitle("AI Assistant")
-	w.SetSize(1024, 600, webview.HintNone)
-	w.Navigate(fmt.Sprintf("http://localhost:%s", port))
-	w.Run()
+	if *headless {
+		server.Start(*port)
+	} else {
+		go server.Start(*port)
+		cmd.StartWebview(*port)
+	}
 }

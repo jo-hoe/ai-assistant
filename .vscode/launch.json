@@ -12,11 +12,16 @@
             "program": "${workspaceFolder}/main.go"
         },
         {
-            "name": "Start Server",
+            "name": "Start Server Only",
             "type": "go",
             "request": "launch",
             "mode": "auto",
-            "program": "${workspaceFolder}/app/server/debug/main.go"
+            "program": "${workspaceFolder}/main.go",
+            "args": [
+                "-port",
+                "8080",
+                "-headless"
+            ]
         }
     ]
 }

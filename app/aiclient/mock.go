@@ -54,24 +54,31 @@ func NewMockClientFromMap(properties map[string]string) (client *MockClient, err
 	return NewMockClient(answers, delayInMilliseconds, errString), nil
 }
 
-func (c *MockClient) Chat(messages []Message) (response chan string, err error) {
+func (c *MockClient) Chat(messages []Message) (response chan AnswerChunk, err error) {
 	if c.errString != "" {
 		return nil, errors.New(c.errString)
 	}
-	response = make(chan string)
+	response = make(chan AnswerChunk)
 	go c.respond(response)
 	return response, err
 }
 
-func (c *MockClient) respond(response chan string) {
+func (c *MockClient) respond(response chan AnswerChunk) {
 	for i, answerPart := range strings.Split(c.answers[c.count%len(c.answers)], " ") {
 		time.Sleep(time.Duration(c.delayInMilliseconds) * time.Millisecond)
 
+		var answer string
 		if i == 0 {
-			response <- answerPart
+			answer = answerPart
 		} else {
-			response <- " " + answerPart
+			answer = " " + answerPart
 		}
+
+		answerChunk := AnswerChunk{
+			Answer: answer,
+		}
+
+		response <- answerChunk
 	}
 	c.count++
 	close(response)

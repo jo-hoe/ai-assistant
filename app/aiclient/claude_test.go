@@ -69,7 +69,7 @@ func TestClaudeAIClient_Chat(t *testing.T) {
 
 	// Check the response
 	expectedResponse := "Hello, I'm Claude!"
-	if response != expectedResponse {
+	if response.Answer != expectedResponse {
 		t.Errorf("Expected response %q, got %q", expectedResponse, response)
 	}
 }

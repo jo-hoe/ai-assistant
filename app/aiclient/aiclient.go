@@ -2,7 +2,6 @@ package aiclient
 
 import (
 	"errors"
-	"strings"
 )
 
 type Message struct {
@@ -10,22 +9,27 @@ type Message struct {
 	Content string `json:"content"`
 }
 
-type Answer struct {
-	Answer []AnswerChunk
+type AnswerChunk struct {
+	Answer     string
+	StopReason string
+	Err        error
 }
 
-type AnswerChunk struct {
-	Answer string
-	Error  error
+func NewAnswerChunk(answer string, stopReason string, err error) *AnswerChunk {
+	return &AnswerChunk{
+		Answer:     answer,
+		StopReason: stopReason,
+		Err:        err,
+	}
 }
 
 type AIClients []AIClient
 
 type AIClient interface {
-	Chat(messages []Message) (response chan string, err error)
+	Chat(messages []Message) (response chan AnswerChunk, err error)
 }
 
-func (c *AIClients) GetAnswer(messages []Message) (response chan string, err error) {
+func (c *AIClients) GetAnswer(messages []Message) (response chan AnswerChunk, err error) {
 	for _, client := range *c {
 		response, err = client.Chat(messages)
 		if err == nil {
@@ -33,12 +37,4 @@ func (c *AIClients) GetAnswer(messages []Message) (response chan string, err err
 		}
 	}
 	return nil, errors.New("all clients failed")
-}
-
-func (c *Answer) CompleteAnswer() string {
-	stringBuilder := strings.Builder{}
-	for _, chunk := range c.Answer {
-		stringBuilder.WriteString(chunk.Answer)
-	}
-	return stringBuilder.String()
 }

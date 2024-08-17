@@ -61,7 +61,7 @@ func TestAIClients_GetAnswer(t *testing.T) {
 			}
 
 			answer := <-gotResponse
-			if answer != tt.wantResponse {
+			if answer.Answer != tt.wantResponse {
 				t.Errorf("AIClients.GetAnswer() = %v, want %v", answer, tt.wantResponse)
 			}
 		})

@@ -29,10 +29,10 @@ func TestMockClient_Chat(t *testing.T) {
 	checkAnswer(responseChannel, expectedAnswers, 0, t)
 }
 
-func checkAnswer(responseChannel chan string, expectedAnswers []string, index int, t *testing.T) {
+func checkAnswer(responseChannel chan AnswerChunk, expectedAnswers []string, index int, t *testing.T) {
 	stringBuilder := strings.Builder{}
 	for answerPart := range responseChannel {
-		stringBuilder.WriteString(answerPart)
+		stringBuilder.WriteString(answerPart.Answer)
 	}
 	if expectedAnswers[index] != stringBuilder.String() {
 		t.Errorf("expected %s, got %s", expectedAnswers[0], stringBuilder.String())

@@ -52,8 +52,8 @@ func NewClaudeAIClientFromMap(properties map[string]string) (client *ClaudeClien
 	}, nil
 }
 
-func (c *ClaudeClient) Chat(messages []Message) (chan string, error) {
-	responseChan := make(chan string)
+func (c *ClaudeClient) Chat(messages []Message) (chan AnswerChunk, error) {
+	responseChan := make(chan AnswerChunk)
 
 	go func() {
 		defer close(responseChan)
@@ -63,13 +63,17 @@ func (c *ClaudeClient) Chat(messages []Message) (chan string, error) {
 			"messages": messages,
 		})
 		if err != nil {
-			responseChan <- fmt.Sprintf("Error marshaling request: %v", err)
+			responseChan <- AnswerChunk{
+				Answer:     "",
+				StopReason: "Error marshaling request",
+				Err:        err,
+			}
 			return
 		}
 
 		req, err := http.NewRequest("POST", c.ApiUrl, bytes.NewBuffer(requestBody))
 		if err != nil {
-			responseChan <- fmt.Sprintf("Error creating request: %v", err)
+			responseChan <- *NewAnswerChunk("", "Error creating request", err)
 			return
 		}
 
@@ -78,42 +82,44 @@ func (c *ClaudeClient) Chat(messages []Message) (chan string, error) {
 
 		resp, err := c.HttpClient.Do(req)
 		if err != nil {
-			responseChan <- fmt.Sprintf("Error sending request: %v", err)
+			responseChan <- *NewAnswerChunk("", "Error sending request", err)
 			return
 		}
 		defer resp.Body.Close()
 
 		if resp.StatusCode != http.StatusOK {
-			responseChan <- fmt.Sprintf("Error: Unexpected status code %d", resp.StatusCode)
+			message := fmt.Sprintf("Error: Unexpected status code %d", resp.StatusCode)
+			responseChan <- *NewAnswerChunk("", message, err)
 			return
 		}
 
 		var result map[string]interface{}
 		err = json.NewDecoder(resp.Body).Decode(&result)
 		if err != nil {
-			responseChan <- fmt.Sprintf("Error decoding response: %v", err)
+			message := fmt.Sprintf("Error decoding response: %v", err)
+			responseChan <- *NewAnswerChunk("", message, err)
 			return
 		}
 
 		content, ok := result["content"].([]interface{})
 		if !ok || len(content) == 0 {
-			responseChan <- "Error: Unexpected response format"
+			responseChan <- *NewAnswerChunk("", "Error: Unexpected response format", err)
 			return
 		}
 
 		firstContent, ok := content[0].(map[string]interface{})
 		if !ok {
-			responseChan <- "Error: Unexpected content format"
+			responseChan <- *NewAnswerChunk("", "Error: Unexpected content format", err)
 			return
 		}
 
 		text, ok := firstContent["text"].(string)
 		if !ok {
-			responseChan <- "Error: Unexpected text format"
+			responseChan <- *NewAnswerChunk("", "Error: Unexpected text format", err)
 			return
 		}
 
-		responseChan <- text
+		responseChan <- *NewAnswerChunk(text, "", nil)
 	}()
 
 	return responseChan, nil

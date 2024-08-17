@@ -71,7 +71,7 @@ func AskAIHandler(c echo.Context) error {
 	responseChannel, err := config.AIClients.GetAnswer([]aiclient.Message{
 		{
 			Role:    "user",
-			Content: prefix + question.Question,
+			Content: fmt.Sprintf("%s %s", prefix, question.Question),
 		},
 	})
 
@@ -81,7 +81,7 @@ func AskAIHandler(c echo.Context) error {
 
 	stringBuilder := strings.Builder{}
 	for answerPart := range responseChannel {
-		stringBuilder.WriteString(answerPart)
+		stringBuilder.WriteString(answerPart.Answer)
 	}
 	answer := stringBuilder.String()
 

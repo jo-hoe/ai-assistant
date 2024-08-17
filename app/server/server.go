@@ -34,17 +34,17 @@ func (s *Server) Start(port int) {
 	s.echo.Logger.Fatal(s.echo.Start(fmt.Sprintf("127.0.0.1:%d", port)))
 }
 
+func (s *Server) Stop() {
+	err := s.echo.Shutdown(context.Background())
+	if err != nil {
+		s.echo.Logger.Fatal(err)
+	}
+}
+
 func IndexHandler(c echo.Context) error {
 	return c.Render(http.StatusOK, "index", nil)
 }
 
 func AskAIHandler(c echo.Context) error {
 	return c.Render(http.StatusOK, "answer", "hello")
-}
-
-func (s *Server) Stop() {
-	err := s.echo.Shutdown(context.Background())
-	if err != nil {
-		s.echo.Logger.Fatal(err)
-	}
 }

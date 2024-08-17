@@ -15,8 +15,10 @@ const envFileName = "testconfig.yaml"
 
 func TestNewConfig(t *testing.T) {
 	configPath := getTestConfigPath(t)
+	os.Setenv(DEFAULT_CONFIG_PATH_KEY, configPath)
+	defer os.Unsetenv(DEFAULT_CONFIG_PATH_KEY)
 
-	config, err := NewConfig(configPath)
+	config, err := LoadConfig()
 
 	if err != nil {
 		t.Error(err)
@@ -27,6 +29,11 @@ func TestNewConfig(t *testing.T) {
 		return
 	}
 
+	expectedPort := 8080
+	if config.Port != expectedPort {
+		t.Errorf("unexpected result = %v, want %v", config.Port, expectedPort)
+	}
+
 	if config.AIClients == nil {
 		t.Error("config.AIClients is nil")
 	}
@@ -34,6 +41,29 @@ func TestNewConfig(t *testing.T) {
 	expectedMockConfig := aiclient.NewMockClient([]string{"42", "this is an answer"}, 500, "error")
 	if !reflect.DeepEqual(config.AIClients[0], expectedMockConfig) {
 		t.Errorf("unexpected result = %v, want %v", config.AIClients[0], expectedMockConfig)
+	}
+}
+
+func TestGetEnv(t *testing.T) {
+	envKey := "TEST_ENV_KEY"
+	envValue := "TEST_ENV_VALUE"
+
+	os.Setenv(envKey, envValue)
+	defer os.Unsetenv(envKey)
+
+	value := GetEnvOrDefault(envKey, "")
+	if value != envValue {
+		t.Errorf("unexpected result = %v, want %v", value, envValue)
+	}
+}
+
+func TestGetEnvDefault(t *testing.T) {
+	envKey := "TEST_ENV_KEY_DEFAULT"
+	defaultEnvValue := "TEST_ENV_VALUE_DEFAULT"
+
+	value := GetEnvOrDefault(envKey, defaultEnvValue)
+	if value != defaultEnvValue {
+		t.Errorf("unexpected result = %v, want %v", value, defaultEnvValue)
 	}
 }
 

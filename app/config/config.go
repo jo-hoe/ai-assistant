@@ -9,8 +9,14 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+const (
+	DEFAULT_CONFIG_PATH_KEY = "CONFIG_PATH"
+	DEFAULT_CONFIG_PATH     = "config.yaml"
+)
+
 type ConfigDescription struct {
 	AIClientConfigDescription []AIClientConfigDescription `yaml:"aiclients"`
+	Port                      int                         `yaml:"port"`
 }
 
 type AIClientConfigDescription struct {
@@ -19,10 +25,16 @@ type AIClientConfigDescription struct {
 }
 
 type Config struct {
+	Port      int
 	AIClients []aiclient.AIClient
 }
 
-func NewConfig(path string) (config *Config, err error) {
+func LoadConfig() (config *Config, err error) {
+	configPath := GetEnvOrDefault(DEFAULT_CONFIG_PATH_KEY, DEFAULT_CONFIG_PATH)
+	return newConfig(configPath)
+}
+
+func newConfig(path string) (config *Config, err error) {
 	data, err := os.ReadFile(path)
 	if err != nil {
 		return nil, err
@@ -53,5 +65,14 @@ func NewConfig(path string) (config *Config, err error) {
 
 	return &Config{
 		AIClients: clients,
+		Port:      configDescription.Port,
 	}, nil
+}
+
+func GetEnvOrDefault(envKey string, defaultValue string) string {
+	value := os.Getenv(envKey)
+	if value == "" {
+		return defaultValue
+	}
+	return value
 }

@@ -5,14 +5,19 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+
+	"github.com/jo-hoe/ai-assistent/app/common"
 )
 
 const (
-	CLAUDE_AI_URL    = "https://api.anthropic.com/v1/messages"
-	CLAUDE_TYPE_NAME = "claude"
+	CLAUDE_AI_URL              = "https://api.anthropic.com/v1/messages"
+	CLAUDE_TYPE_NAME           = "claude"
+	CLAUDE_DEFAULT_MODEL       = "claude-3-5-sonnet-20240620"
+	claude_default_api_env_key = "CLAUDE_API_KEY"
 
 	claude_api_key_key = "apiKey"
 	claude_model_key   = "model"
+	claude_api_env_key = "apiEnvKey"
 )
 
 type ClaudeClient struct {
@@ -26,14 +31,15 @@ func NewClaudeAIClientFromMap(properties map[string]string) (client *ClaudeClien
 	var apiKey string
 	var model string
 
-	if properties[claude_api_key_key] == "" {
-		return nil, fmt.Errorf("missing %s", claude_api_key_key)
-	} else {
+	if properties[claude_api_env_key] == "" {
+		apiKey = common.GetEnvOrDefault(claude_default_api_env_key, "")
+	}
+	if properties[claude_api_key_key] != "" {
 		apiKey = properties[claude_api_key_key]
 	}
 
 	if properties[claude_model_key] == "" {
-		model = "claude-2"
+		model = CLAUDE_DEFAULT_MODEL
 	} else {
 		model = properties["model"]
 	}

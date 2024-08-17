@@ -6,6 +6,7 @@ import (
 	"sync"
 
 	"github.com/jo-hoe/ai-assistent/app/aiclient"
+	"github.com/jo-hoe/ai-assistent/app/common"
 
 	"gopkg.in/yaml.v3"
 )
@@ -49,7 +50,7 @@ func GetConfig() *Config {
 }
 
 func loadConfig() (config *Config, err error) {
-	configPath := GetEnvOrDefault(DEFAULT_CONFIG_PATH_KEY, DEFAULT_CONFIG_PATH)
+	configPath := common.GetEnvOrDefault(DEFAULT_CONFIG_PATH_KEY, DEFAULT_CONFIG_PATH)
 	return newConfig(configPath)
 }
 
@@ -91,12 +92,4 @@ func newConfig(path string) (config *Config, err error) {
 		AIClients: clients,
 		Port:      configDescription.Port,
 	}, nil
-}
-
-func GetEnvOrDefault(envKey string, defaultValue string) string {
-	value := os.Getenv(envKey)
-	if value == "" {
-		return defaultValue
-	}
-	return value
 }

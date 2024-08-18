@@ -13,18 +13,20 @@
 
 <body>
   <form>
+    {{ template "qna" . }}
     <textarea name="question" id="question"></textarea>
-    <button hx-post="/ask?question-prefix=hallo" hx-include="#question" hx-target="#result">
+    <button hx-post="/ask?question-prefix=hallo" hx-include="#question" hx-target="#qna">
       Ask
     </button>
   </form>
-
-  <div id="result">{{ template "answer" . }}</div>
 </body>
 
 </html>
 {{ end }}
 
-{{ block "answer" . }}
-Your answer: {{ .Answer }}
+{{ block "qna" . }}
+<div id="qna">
+  <div id="conversion_question">{{ .Question }}</div>
+  <div id="conversion_answer">{{ .Answer }}</div>
+</div>
 {{ end }}

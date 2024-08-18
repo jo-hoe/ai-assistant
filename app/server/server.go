@@ -54,8 +54,13 @@ type question struct {
 	Question string `form:"question"`
 }
 
-type Answer struct {
-	Answer string
+type Conversation struct {
+	Conversation []QnA
+}
+
+type QnA struct {
+	Question string
+	Answer   string
 }
 
 func AskAIHandler(c echo.Context) error {
@@ -85,7 +90,8 @@ func AskAIHandler(c echo.Context) error {
 	}
 	answer := stringBuilder.String()
 
-	return c.Render(http.StatusOK, "answer", Answer{
-		Answer: answer,
+	return c.Render(http.StatusOK, "qna", QnA{
+		Answer:   answer,
+		Question: question.Question,
 	})
 }

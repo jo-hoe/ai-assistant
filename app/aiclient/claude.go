@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 
 	"github.com/jo-hoe/ai-assistent/app/common"
@@ -88,7 +89,12 @@ func (c *ClaudeClient) Chat(messages []Message) (chan AnswerChunk, error) {
 		defer resp.Body.Close()
 
 		if resp.StatusCode != http.StatusOK {
-			message := fmt.Sprintf("Error: Unexpected status code %d", resp.StatusCode)
+			body, bodyErr := io.ReadAll(resp.Body)
+			if bodyErr != nil {
+				responseChan <- *NewAnswerChunk("", "Error reading response", err)
+				return
+			}
+			message := fmt.Sprintf("Error: Unexpected status code %d %q", resp.StatusCode, string(body))
 			responseChan <- *NewAnswerChunk("", message, err)
 			return
 		}

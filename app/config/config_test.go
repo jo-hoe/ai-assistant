@@ -38,6 +38,21 @@ func TestNewConfig(t *testing.T) {
 	if !reflect.DeepEqual(config.AIClients[0], expectedMockConfig) {
 		t.Errorf("unexpected result = %v, want %v", config.AIClients[0], expectedMockConfig)
 	}
+
+	selfhostedClientConfig := config.AIClients[1].(*aiclient.SelfHostedAIClient)
+	expectedUrl := "http://127.0.0.1:8081/v1/conversation"
+	expectedModel := "local"
+	if selfhostedClientConfig.Url != expectedUrl {
+		t.Errorf("unexpected result = %v, want %v", selfhostedClientConfig.Url, expectedUrl)
+	}
+
+	if selfhostedClientConfig.Model != expectedModel {
+		t.Errorf(
+			"unexpected result = %v, want %v",
+			selfhostedClientConfig.Model,
+			expectedModel,
+		)
+	}
 }
 
 func getTestConfigPath(t *testing.T) string {

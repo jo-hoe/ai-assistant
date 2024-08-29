@@ -12,8 +12,8 @@ import (
 )
 
 type SelfHostedAIClient struct {
-	url    string
-	model  string
+	Url    string
+	Model  string
 	client *http.Client
 }
 
@@ -30,7 +30,11 @@ type responseData struct {
 }
 
 const (
-	defaultRole = "assistant"
+	defaultRole             = "assistant"
+	selfhosted_client_model = "model"
+	selfhosted_client_url   = "url"
+
+	SELF_HOSTED_CLIENT_TYPE_NAME = "selfhosted"
 )
 
 type selfHostedMessage struct {
@@ -38,11 +42,17 @@ type selfHostedMessage struct {
 	Content string `json:"content"`
 }
 
-func NewSelfHostedAIClient(url string, model string) *SelfHostedAIClient {
-	return &SelfHostedAIClient{
-		url:   url,
-		model: model,
+func NewSelfHostedAIClientFromMap(properties map[string]string) (client *SelfHostedAIClient, err error) {
+	url := properties[selfhosted_client_url]
+	if url == "" {
+		return nil, fmt.Errorf("url is required")
 	}
+
+	return &SelfHostedAIClient{
+		Url:    url,
+		Model:  properties[selfhosted_client_model],
+		client: &http.Client{},
+	}, nil
 }
 
 func (c *SelfHostedAIClient) Ask(query string) (response chan AnswerChunk, err error) {
@@ -53,7 +63,7 @@ func (c *SelfHostedAIClient) Ask(query string) (response chan AnswerChunk, err e
 
 func (c *SelfHostedAIClient) respond(query string, response chan AnswerChunk) {
 	message := selfHostedMessageEnvelope{
-		Model: c.model,
+		Model: c.Model,
 		Messages: []selfHostedMessage{
 			{
 				Role:    defaultRole,
@@ -71,7 +81,7 @@ func (c *SelfHostedAIClient) respond(query string, response chan AnswerChunk) {
 	}
 
 	// Create a new request
-	req, err := http.NewRequest("POST", c.url, bytes.NewBuffer(jsonData))
+	req, err := http.NewRequest("POST", c.Url, bytes.NewBuffer(jsonData))
 	if err != nil {
 		response <- *NewAnswerChunk("", err)
 		close(response)

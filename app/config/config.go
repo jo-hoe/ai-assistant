@@ -76,6 +76,11 @@ func newConfig(path string) (config *Config, err error) {
 			if err != nil {
 				return nil, err
 			}
+		case aiclient.SELF_HOSTED_CLIENT_TYPE_NAME:
+			client, err = aiclient.NewSelfHostedAIClientFromMap(clientsConfig.Properties)
+			if err != nil {
+				return nil, err
+			}
 		default:
 			return nil, fmt.Errorf("unknown service type: %s", clientsConfig.Type)
 		}

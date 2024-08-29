@@ -12,19 +12,19 @@ func TestMockClient_Chat(t *testing.T) {
 
 	responseChannel, err := mockClient.Ask("")
 	if err != nil {
-		t.Errorf(err.Error())
+		t.Errorf("could not ask question: %s", err.Error())
 	}
 	checkAnswer(responseChannel, expectedAnswers, 0, t)
 
 	responseChannel, err = mockClient.Ask("")
 	if err != nil {
-		t.Errorf(err.Error())
+		t.Errorf("could not ask question: %s", err.Error())
 	}
 	checkAnswer(responseChannel, expectedAnswers, 1, t)
 
 	responseChannel, err = mockClient.Ask("")
 	if err != nil {
-		t.Errorf(err.Error())
+		t.Errorf("could not ask question: %s", err.Error())
 	}
 	checkAnswer(responseChannel, expectedAnswers, 0, t)
 }

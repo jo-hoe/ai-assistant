@@ -54,7 +54,7 @@ func NewMockClientFromMap(properties map[string]string) (client *MockClient, err
 	return NewMockClient(answers, delayInMilliseconds, errString), nil
 }
 
-func (c *MockClient) Chat(messages []Message) (response chan AnswerChunk, err error) {
+func (c *MockClient) Ask(query string) (response chan AnswerChunk, err error) {
 	if c.errString != "" {
 		return nil, errors.New(c.errString)
 	}

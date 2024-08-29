@@ -4,21 +4,14 @@ import (
 	"errors"
 )
 
-type Message struct {
-	Role    string `json:"role"`
-	Content string `json:"content"`
-}
-
 type AnswerChunk struct {
 	Answer     string
-	StopReason string
 	Err        error
 }
 
-func NewAnswerChunk(answer string, stopReason string, err error) *AnswerChunk {
+func NewAnswerChunk(answer string, err error) *AnswerChunk {
 	return &AnswerChunk{
 		Answer:     answer,
-		StopReason: stopReason,
 		Err:        err,
 	}
 }
@@ -26,12 +19,12 @@ func NewAnswerChunk(answer string, stopReason string, err error) *AnswerChunk {
 type AIClients []AIClient
 
 type AIClient interface {
-	Chat(messages []Message) (response chan AnswerChunk, err error)
+	Ask(query string) (response chan AnswerChunk, err error)
 }
 
-func (c *AIClients) GetAnswer(messages []Message) (response chan AnswerChunk, err error) {
+func (c *AIClients) GetAnswer(query string) (response chan AnswerChunk, err error) {
 	for _, client := range *c {
-		response, err = client.Chat(messages)
+		response, err = client.Ask(query)
 		if err == nil {
 			return response, nil
 		}

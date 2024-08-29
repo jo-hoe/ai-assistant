@@ -4,6 +4,3 @@ aiclients:
     errString: "error"
     delayInMilliseconds: 500
     commaSeparatedAnswers: "42,this is an answer"
-  - type: claude
-    model: "claude-instant-1"
-    apiKey: "non-functional-test-key"

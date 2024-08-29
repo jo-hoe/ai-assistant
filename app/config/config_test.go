@@ -38,16 +38,6 @@ func TestNewConfig(t *testing.T) {
 	if !reflect.DeepEqual(config.AIClients[0], expectedMockConfig) {
 		t.Errorf("unexpected result = %v, want %v", config.AIClients[0], expectedMockConfig)
 	}
-	expectedClaudeConfig, err := aiclient.NewClaudeAIClientFromMap(map[string]string{
-		"model":  "claude-instant-1",
-		"apiKey": "non-functional-test-key",
-	})
-	if err != nil {
-		t.Error(err)
-	}
-	if !reflect.DeepEqual(config.AIClients[1], expectedClaudeConfig) {
-		t.Errorf("unexpected result = %v, want %v", config.AIClients[1], expectedClaudeConfig)
-	}
 }
 
 func getTestConfigPath(t *testing.T) string {

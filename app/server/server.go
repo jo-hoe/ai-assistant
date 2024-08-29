@@ -7,7 +7,6 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/jo-hoe/ai-assistent/app/aiclient"
 	"github.com/jo-hoe/ai-assistent/app/config"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -73,12 +72,7 @@ func AskAIHandler(c echo.Context) error {
 
 	config := config.GetConfig()
 
-	responseChannel, err := config.AIClients.GetAnswer([]aiclient.Message{
-		{
-			Role:    "user",
-			Content: fmt.Sprintf("%s %s", prefix, question.Question),
-		},
-	})
+	responseChannel, err := config.AIClients.GetAnswer(fmt.Sprintf("%s %s", prefix, question.Question))
 
 	if err != nil {
 		return c.String(http.StatusInternalServerError, err.Error())

@@ -10,19 +10,19 @@ func TestMockClient_Chat(t *testing.T) {
 	expectedAnswers := []string{"first answer", "second answer"}
 	mockClient := NewMockClient(expectedAnswers, 0, "")
 
-	responseChannel, err := mockClient.Chat(nil)
+	responseChannel, err := mockClient.Ask("")
 	if err != nil {
 		t.Errorf(err.Error())
 	}
 	checkAnswer(responseChannel, expectedAnswers, 0, t)
 
-	responseChannel, err = mockClient.Chat(nil)
+	responseChannel, err = mockClient.Ask("")
 	if err != nil {
 		t.Errorf(err.Error())
 	}
 	checkAnswer(responseChannel, expectedAnswers, 1, t)
 
-	responseChannel, err = mockClient.Chat(nil)
+	responseChannel, err = mockClient.Ask("")
 	if err != nil {
 		t.Errorf(err.Error())
 	}
@@ -43,7 +43,7 @@ func TestMockClient_Chat_Error(t *testing.T) {
 	expectedError := "error"
 	mockClient := NewMockClient([]string{}, 0, expectedError)
 
-	responseChannel, err := mockClient.Chat(nil)
+	responseChannel, err := mockClient.Ask("")
 
 	if err == nil {
 		t.Errorf("error was nil")

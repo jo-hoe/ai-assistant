@@ -7,6 +7,7 @@ import (
 	"strings"
 	"text/template"
 
+	"github.com/jo-hoe/ai-assistent/app/common"
 	"github.com/jo-hoe/ai-assistent/app/config"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -85,7 +86,7 @@ func AskAIHandler(c echo.Context) error {
 	answer := stringBuilder.String()
 
 	return c.Render(http.StatusOK, "qna", QnA{
-		Answer:   answer,
+		Answer:   common.MarkdownToHTML(answer),
 		Question: question.Question,
 	})
 }

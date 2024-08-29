@@ -84,3 +84,93 @@ func TestSelfHostedAIClientRespond(t *testing.T) {
 		}
 	}
 }
+
+func TestNewSelfHostedAIClientFromMap(t *testing.T) {
+	tests := []struct {
+		name       string
+		properties map[string]string
+		want       *SelfHostedAIClient
+		wantErr    bool
+		errMsg     string
+	}{
+		{
+			name: "Valid properties",
+			properties: map[string]string{
+				selfhosted_client_url:   "http://example.com",
+				selfhosted_client_model: "local",
+			},
+			want: &SelfHostedAIClient{
+				Url:   "http://example.com",
+				Model: "local",
+			},
+			wantErr: false,
+		},
+		{
+			name: "Missing URL",
+			properties: map[string]string{
+				selfhosted_client_model: "local",
+			},
+			want:    nil,
+			wantErr: true,
+			errMsg:  "url is required",
+		},
+		{
+			name: "Empty URL",
+			properties: map[string]string{
+				selfhosted_client_url:   "",
+				selfhosted_client_model: "local",
+			},
+			want:    nil,
+			wantErr: true,
+			errMsg:  "url is required",
+		},
+		{
+			name: "Missing model",
+			properties: map[string]string{
+				selfhosted_client_url: "http://example.com",
+			},
+			want: &SelfHostedAIClient{
+				Url:   "http://example.com",
+				Model: "",
+			},
+			wantErr: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := NewSelfHostedAIClientFromMap(tt.properties)
+
+			if (err != nil) != tt.wantErr {
+				t.Errorf("NewSelfHostedAIClientFromMap() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+
+			if tt.wantErr {
+				if err.Error() != tt.errMsg {
+					t.Errorf("NewSelfHostedAIClientFromMap() error message = %v, want %v", err.Error(), tt.errMsg)
+				}
+				return
+			}
+
+			if got == nil || tt.want == nil {
+				if got != tt.want {
+					t.Errorf("NewSelfHostedAIClientFromMap() = %v, want %v", got, tt.want)
+				}
+				return
+			}
+
+			if got.Url != tt.want.Url {
+				t.Errorf("NewSelfHostedAIClientFromMap() Url = %v, want %v", got.Url, tt.want.Url)
+			}
+
+			if got.Model != tt.want.Model {
+				t.Errorf("NewSelfHostedAIClientFromMap() Model = %v, want %v", got.Model, tt.want.Model)
+			}
+
+			if got.client == nil {
+				t.Errorf("NewSelfHostedAIClientFromMap() client is nil")
+			}
+		})
+	}
+}

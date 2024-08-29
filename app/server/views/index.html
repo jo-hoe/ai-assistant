@@ -15,7 +15,7 @@
   <form>
     {{ template "qna" . }}
     <textarea name="question" id="question"></textarea>
-    <button hx-post="/ask?question-prefix=hallo" hx-include="#question" hx-target="#qna">
+    <button hx-post="/ask?question-prefix=you enhance all text which is given to you:\n" hx-include="#question" hx-target="#qna">
       Ask
     </button>
   </form>

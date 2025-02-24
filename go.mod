@@ -1,6 +1,7 @@
 module github.com/jo-hoe/ai-assistent
 
 go 1.22.5
+toolchain go1.23.6
 
 require (
 	github.com/gomarkdown/markdown v0.0.0-20240730141124-034f12af3bf6
@@ -15,7 +16,7 @@ require (
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect
-	golang.org/x/crypto v0.33.0 // indirect
+	golang.org/x/crypto v0.35.0 // indirect
 	golang.org/x/net v0.35.0 // indirect
 	golang.org/x/sys v0.30.0 // indirect
 	golang.org/x/text v0.22.0 // indirect

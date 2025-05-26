@@ -1,11 +1,12 @@
 module github.com/jo-hoe/ai-assistent
 
-go 1.22.5
+go 1.23.0
+
 toolchain go1.24.1
 
 require (
 	github.com/gomarkdown/markdown v0.0.0-20240730141124-034f12af3bf6
-	github.com/labstack/echo/v4 v4.13.3
+	github.com/labstack/echo/v4 v4.13.4
 	github.com/webview/webview_go v0.0.0-20240220051247-56f456ca3a43
 	gopkg.in/yaml.v3 v3.0.1
 )

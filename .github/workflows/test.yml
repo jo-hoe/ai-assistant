@@ -16,7 +16,7 @@ jobs:
     runs-on: ${{ matrix.platform }}
     steps:
       - name: "Checkout Repository"
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Run Test
         run: make docker-test
       - name: Convert coverage.out to coverage.lcov
